@@ -1,6 +1,6 @@
-import NavLinkList from "../ui/NavLinkList";
+import NavLinkList from "./NavLinkList";
 import { navIcons } from "@/constants/navIcons";
-import NavLink from "../ui/NavLink";
+import Link from "../ui/Link";
 import { navLinks } from "@/constants/navLinks";
 import Icon from "../ui/Icon";
 import SearchBar from "../ui/SearchBar";
@@ -22,9 +22,9 @@ export default function Header() {
         <SearchBar />
         <div className="flex items-center gap-5">
           {navIcons.map((item) => (
-            <NavLink href={item.href} key={item.id} aria-label={item.label}>
+            <Link href={item.href} key={item.id} aria-label={item.label}>
               <Icon Icon={item.icon} key={item.id} color="black" size="24" />
-            </NavLink>
+            </Link>
           ))}
         </div>
       </div>

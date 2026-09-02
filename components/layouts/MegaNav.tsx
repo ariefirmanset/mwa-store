@@ -1,20 +1,20 @@
-import React from "react";
-import Button from "../ui/Button";
 import Icon from "../ui/Icon";
 import { ChevronDown } from "lucide-react";
 import { navMegaLinks } from "@/constants/navMegaLinks";
 import Heading from "../ui/Heading";
 import List from "../ui/List";
-import NavLink from "../ui/NavLink";
+import NavLink from "../ui/Link";
 import Img from "../ui/Img";
+import { Button } from "../ui/Button";
 
 export default function MegaNav() {
   return (
     <div className="relative group justify-around">
       <Button
         type="button"
-        ariaLabel="category"
-        className="flex items-end gap-1.5 group-hover:text-black"
+        variant="ghost"
+        size="lg"
+        className="flex items-end gap-1.5 h-auto p-0 hover:bg-transparent group"
       >
         <span className="uppercase">Category</span>
         <Icon

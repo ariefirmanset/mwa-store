@@ -1,17 +1,17 @@
 import { ComponentProps } from "react";
 
-interface NavLinkProps extends ComponentProps<"a"> {
+interface LinkProps extends ComponentProps<"a"> {
   label?: string;
 }
-export default function NavLink({
+export default function Link({
   label,
   className = "",
   children,
   ...props
-}: NavLinkProps) {
+}: LinkProps) {
   return (
     <a
-      className={`transition-colors hover:text-abut-netral ${className}`}
+      className={`transition-colors hover:text-abu-netral ${className}`}
       {...props}
       aria-label={props["aria-label"] || label}
     >

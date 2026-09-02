@@ -1,4 +1,4 @@
-import React, { ComponentProps, ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 interface ListProps<T> extends Omit<ComponentProps<"ul">, "children"> {
   List: Array<T>;

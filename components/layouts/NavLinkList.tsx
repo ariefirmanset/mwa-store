@@ -1,4 +1,4 @@
-import NavLink from "./NavLink";
+import NavLink from "../ui/Link";
 
 interface NavItem {
   href: string;

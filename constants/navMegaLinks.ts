@@ -22,7 +22,7 @@ export const navMegaLinks = [
   },
   {
     id: 3,
-    header: "aksesoris",
+    header: "Aksesoris",
     subLinks: [
       { label: "tas & ransel", href: "./tas-and-ransel" },
       { label: "dompet", href: "./dompet" },

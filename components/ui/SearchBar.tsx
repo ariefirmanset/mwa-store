@@ -1,4 +1,4 @@
-import Button from "./Button";
+import { Button } from "./Button";
 import Icon from "./Icon";
 import Input from "./Input";
 import { Search } from "lucide-react";
@@ -13,8 +13,10 @@ export default function SearchBar() {
       />
 
       <Button
-        ariaLabel="Cari"
-        className="flex items-center justify-center text-neutral-600 hover:text-black shrink-0"
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="text-neutral-600 shrink-0 hover:bg-transparent"
       >
         <Icon Icon={Search} size={20} />
       </Button>
