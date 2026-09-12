@@ -137,11 +137,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   const { carouselRef, orientation } = useCarousel();
 
   return (
-    <div
-      ref={carouselRef}
-      className="overflow-hidden"
-      data-slot="carousel-content"
-    >
+    <div ref={carouselRef} className="" data-slot="carousel-content">
       <div
         className={cn(
           "flex",
@@ -175,60 +171,64 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 function CarouselPrevious({
   className,
   variant = "outline",
-  size = "icon-sm",
+  size = "icon-lg",
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
-    <Button
-      data-slot="carousel-previous"
-      variant={variant}
-      size={size}
-      className={cn(
-        "absolute touch-manipulation rounded-full",
-        orientation === "horizontal"
-          ? "inset-y-0 -left-12 my-auto cursor-pointer"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
-      )}
-      disabled={!canScrollPrev}
-      onClick={scrollPrev}
-      {...props}
-    >
-      <ChevronLeftIcon />
-      <span className="sr-only">Previous slide</span>
-    </Button>
+    canScrollPrev && (
+      <Button
+        data-slot="carousel-previous"
+        variant={variant}
+        size={size}
+        className={cn(
+          "absolute touch-manipulation",
+          orientation === "horizontal"
+            ? "inset-y-0 -left-12 my-auto cursor-pointer"
+            : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+          className,
+        )}
+        disabled={!canScrollPrev}
+        onClick={scrollPrev}
+        {...props}
+      >
+        <ChevronLeftIcon />
+        <span className="sr-only">Previous slide</span>
+      </Button>
+    )
   );
 }
 
 function CarouselNext({
   className,
   variant = "outline",
-  size = "icon-sm",
+  size = "icon-lg",
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
   return (
-    <Button
-      data-slot="carousel-next"
-      variant={variant}
-      size={size}
-      className={cn(
-        "absolute touch-manipulation rounded-full",
-        orientation === "horizontal"
-          ? "inset-y-0 -right-12 my-auto cursor-pointer"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
-      )}
-      disabled={!canScrollNext}
-      onClick={scrollNext}
-      {...props}
-    >
-      <ChevronRightIcon />
-      <span className="sr-only">Next slide</span>
-    </Button>
+    canScrollNext && (
+      <Button
+        data-slot="carousel-next"
+        variant={variant}
+        size={size}
+        className={cn(
+          "absolute touch-manipulation",
+          orientation === "horizontal"
+            ? "inset-y-0 -right-12 my-auto cursor-pointer"
+            : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+          className,
+        )}
+        disabled={!canScrollNext}
+        onClick={scrollNext}
+        {...props}
+      >
+        <ChevronRightIcon />
+        <span className="sr-only">Next slide</span>
+      </Button>
+    )
   );
 }
 

@@ -15,6 +15,7 @@ Gambaran menyeluruh mengenai bagaimana antarmuka ini berinteraksi dengan sistem 
 - [Diagram Sistem & Alur Komunikasi](./docs/arsitektur.png)
 - [Skema Database (ERD)](./docs/database-erd.png)
 - [Kontrak API (API Contract)](./docs/api-contract.md)
+- [Dokumentasi Brand & Design System](https://docs.google.com/document/d/1hjM3tJmmGOqfzQ64fAyfLbETHWTa8YTRgxkKDqmLxgs/edit?tab=t.0)
 
 ## 🚀 Cara Menjalankan di Lokal (Development)
 

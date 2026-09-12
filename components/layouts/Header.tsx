@@ -8,10 +8,10 @@ import MegaNav from "./MegaNav";
 
 export default function Header() {
   return (
-    <header className="lg:h-16 bg-krem flex items-center gap-0 lg:p-[0_80px] text-black">
+    <header className="sticky top-0 lg:h-16 bg-krem flex items-center gap-0 lg:p-[0_80px] text-black z-10">
       {/* left */}
       <div className="flex gap-12 w-full items-center">
-        <p className="font-italiana text-[28px]">AFS.</p>
+        <p className="font-italiana text-[28px]">Terralia</p>
         <div className="flex gap-6">
           <MegaNav />
           <NavLinkList links={navLinks} linkClassName="uppercase" />

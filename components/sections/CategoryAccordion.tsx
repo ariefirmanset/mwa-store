@@ -32,6 +32,7 @@ export default function CategoryAccordion() {
                 <p className="text-white/80 text-sm md:text-base mb-4 hidden md:block">
                   {item.description}
                 </p>
+
                 <span className="inline-block bg-olive-tua hover:bg-sage text-white px-6 py-2 text-sm font-semibold tracking-wider transition-colors duration-300 uppercase">
                   Shop Now
                 </span>
