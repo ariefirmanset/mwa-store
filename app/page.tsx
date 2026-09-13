@@ -3,7 +3,7 @@ import PromoHighlight from "@/components/layouts/PromoHighlight";
 import BecomeMember from "@/components/sections/BecomeMember";
 import CategoryAccordion from "@/components/sections/CategoryAccordion";
 import Hero from "@/components/sections/Hero";
-import Promos from "@/components/sections/Promos";
+import NewBrand from "@/components/sections/NewBrand";
 import Shirt from "@/components/sections/Shirt";
 import TopProduct from "@/components/sections/TopProduct";
 
@@ -16,7 +16,7 @@ export default function Home() {
       <CategoryAccordion />
       <Shirt />
       <BecomeMember />
-      <Promos />
+      <NewBrand />
       <TopProduct />
       <Footer />
     </>

@@ -6,6 +6,7 @@ import List from "../ui/List";
 import NavLink from "../ui/Link";
 import Img from "../ui/Img";
 import { Button } from "../ui/Button";
+import Link from "../ui/Link";
 
 export default function MegaNav() {
   return (
@@ -51,9 +52,14 @@ export default function MegaNav() {
             <span className="absolute top-1.5 left-1.75 text-white font-bold text-[12px]">
               New Arrivals 2026
             </span>
-            <span className="absolute bottom-1.5 right-3.75 text-white font-bold text-[12px]">
+            <Button
+              className="absolute bottom-1.5 right-3.75 text-white font-bold text-[12px]"
+              variant="link"
+              render={<Link href="/collection"></Link>}
+              nativeButton={false}
+            >
               Lihat Koleksi →
-            </span>
+            </Button>
           </div>
         </div>
       </div>

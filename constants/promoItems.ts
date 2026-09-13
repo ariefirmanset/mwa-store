@@ -7,8 +7,8 @@ export const promoItems = [
   },
   {
     id: 2,
-    alt: "promo knitwear",
+    alt: "promo sneaker",
     link: "/#",
-    src: "/img/promos/promoKnitwear.jpeg",
+    src: "/img/promos/basketball.jpeg",
   },
 ];

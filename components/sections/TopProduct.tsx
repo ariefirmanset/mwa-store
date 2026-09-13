@@ -10,8 +10,8 @@ import {
 
 export default function TopProduct() {
   return (
-    <div className="flex flex-col w-full h-[calc(100dvh-4rem)] min-h-[500px] max-h-[750px] bg-olive-tua px-[5%] pb-[8%] justify-center items-center">
-      <Typograpy className="text-center py-16 ">Top Products</Typograpy>
+    <div className="flex flex-col w-full h-[calc(100dvh-4rem)] min-h-[500px] max-h-[750px] bg-krem px-[5%] pb-[8%] justify-center items-center pt-24">
+      <Typograpy className="text-center py-16">Top Products</Typograpy>
       <div className="flex gap-4">
         <Carousel className="w-full max-w-5xl">
           <CarouselContent>

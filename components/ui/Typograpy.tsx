@@ -11,10 +11,7 @@ export default function Typograpy({
   ...props
 }: TypograpyProps) {
   return (
-    <span
-      className={`text-5xl text-krem font-italiana ${className}`}
-      {...props}
-    >
+    <span className={`text-5xl font-italiana ${className}`} {...props}>
       {children}
     </span>
   );

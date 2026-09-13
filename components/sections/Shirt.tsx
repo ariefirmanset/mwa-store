@@ -18,7 +18,7 @@ export default function Shirt() {
     <section id="shirt">
       <div className="relative h-[100dvh] overflow-hidden">
         <Img
-          src="/img/shirt/shirtHero.jpeg"
+          src="/img/shirt/shirtHero1.jpeg"
           alt="black shirt crop top"
           fill
           sizes="(max-width: 768px) 80vw, (max-width: 1200px) 100vw,100vw"
