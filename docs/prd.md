@@ -60,6 +60,7 @@ Project ini adalah aplikasi e-commerce **satu toko** yang dibangun untuk belajar
 - Checkout dengan alamat pengiriman
 - Melihat riwayat dan detail pesanan, termasuk status tiap barang
 - Membatalkan pesanan selama masih `pending`
+- menggunakan payment sandbox agar mirip dengan yang asli
 
 **Admin (React/Vue, dashboard)**
 
@@ -85,7 +86,7 @@ Project ini adalah aplikasi e-commerce **satu toko** yang dibangun untuk belajar
 | Multi-vendor / marketplace                      | Project single-store dengan satu admin. Tidak ada tabel toko/seller                           |
 | Pemecahan status per unit (partial fulfillment) | Kasus jarang untuk satu gudang, menambah tabel dan validasi yang rumit. Bisa di-upgrade nanti |
 | Nomor resi dan pilihan kurir                    | Status pengiriman cukup lewat status item, tanpa data paket                                   |
-| Payment gateway asli                            | 🖊️ Putuskan: simulasi manual atau tidak ada pembayaran sama sekali                            |
+| Payment gateway asli                            | Menggunakan sandbox karena project portofolio                                                 |
 | Refresh token                                   | Disederhanakan: access token 7 hari dalam httpOnly cookie                                     |
 | Notifikasi email / WhatsApp                     | Di luar fokus belajar                                                                         |
 | Review dan rating produk                        | Di luar fokus belajar                                                                         |
