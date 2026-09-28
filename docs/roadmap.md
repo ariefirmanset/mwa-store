@@ -23,18 +23,18 @@ Panduan urutan kerja dari awal sampai akhir. Task yang terlewat boleh ditambahka
 - [x] Snapshot nama produk, SKU, atribut, dan harga di `order_details`
 - [x] Konvensi bahasa (field/status/code Inggris, message Indonesia)
 - [x] PRD terisi
+- [x] Update DBML: hapus `order_detail_fulfillments`, tambah `status` di `order_details`
+- [x] Update DBML: `variant_attributes` jadi `jsonb` (atau putuskan tetap `varchar`)
+- [x] Putuskan di PRD: ada simulasi pembayaran atau tidak
+- [x] ADR: pemilihan Django REST Framework
+- [x] ADR: strategi auth (httpOnly cookie)
+- [x] ADR: status per item dengan status order turunan
+- [x] ADR: strategi varian produk
 
 **Masih tersisa**
 
-- [ ] Update DBML: hapus `order_detail_fulfillments`, tambah `status` di `order_details`
-- [ ] Update DBML: `variant_attributes` jadi `jsonb` (atau putuskan tetap `varchar`)
-- [ ] Simpan DBML sebagai `docs/database.dbml` di repo, ekspor ulang PNG
-- [ ] Putuskan di PRD: ada simulasi pembayaran atau tidak
-- [ ] ADR: strategi varian produk
-- [ ] ADR: pemilihan Django REST Framework
-- [ ] ADR: strategi auth (httpOnly cookie)
 - [ ] ADR: message API berbahasa Indonesia
-- [ ] ADR: status per item dengan status order turunan
+- [ ] Simpan DBML sebagai `docs/database.dbml` di repo, ekspor ulang PNG
 
 **Keluar dari fase ini kalau:** DBML, api-contract, dan PRD tidak lagi saling bertentangan.
 

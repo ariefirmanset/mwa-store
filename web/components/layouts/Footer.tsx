@@ -27,7 +27,7 @@ interface FooterProps extends React.HTMLAttributes<HTMLElement> {
  */
 export const Footer: FC<FooterProps> = ({
   //   logoSrc,
-  companyName = "Terralia",
+  companyName = "MWA Store",
   description = "Empowering businesses with intelligent financial solutions, designed for the future of finance.",
   usefulLinks = [
     { label: "Products", href: "#" },

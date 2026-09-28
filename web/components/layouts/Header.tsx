@@ -11,7 +11,7 @@ export default function Header() {
     <header className="sticky top-0 lg:h-16 bg-krem flex items-center gap-0 lg:p-[0_80px] text-black z-10">
       {/* left */}
       <div className="flex gap-12 w-full items-center">
-        <p className="font-italiana text-[28px]">Terralia</p>
+        <p className="font-italiana text-[28px]">MWA Store</p>
         <div className="flex gap-6">
           <MegaNav />
           <NavLinkList links={navLinks} linkClassName="uppercase" />
