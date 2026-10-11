@@ -26,6 +26,7 @@
 | ------------------------------------------------------ | ----------- | --------------------------- |
 | Produk tidak ditemukan                                 | 404         | `PRODUCT_NOT_FOUND`         |
 | Varian produk tidak ditemukan                          | 404         | `PRODUCT_VARIANT_NOT_FOUND` |
+| Gambar produk tidak ditemukan                          | 404         | `IMAGE_NOT_FOUND`           |
 | Order tidak ditemukan                                  | 404         | `ORDER_NOT_FOUND`           |
 | Stok tidak cukup saat checkout                         | 400         | `OUT_OF_STOCK`              |
 | Order tidak bisa dibatalkan (status bukan `pending`)   | 400         | `ORDER_CANNOT_BE_CANCELLED` |
@@ -68,7 +69,7 @@ Contoh error validasi (banyak field sekaligus):
 {
   "username": "ariefirman",
   "email": "devariefirman@gmail.com",
-  "no_hp": "08549684649",
+  "phone_number": "08549684649",
   "password": "User@123"
 }
 ```
@@ -84,12 +85,13 @@ Contoh error validasi (banyak field sekaligus):
     "id": 1,
     "username": "ariefirman",
     "email": "devariefirman@gmail.com",
-    "no_hp": "08549684649"
+    "phone_number": "08549684649"
   }
 }
 ```
 
 > Catatan: `password` TIDAK PERNAH dikembalikan dalam response, meskipun sudah di-hash.
+> User yang mendaftar lewat endpoint ini otomatis mendapat role `customer`. Role tidak dikirim dari frontend.
 
 ### B. Login
 
@@ -129,20 +131,45 @@ Set-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secu
 ```
 
 > `Max-Age=604800` = 7 hari, sesuai keputusan expiry di atas.
+> Setelah login berhasil, jika user belum punya cart, cart dibuat otomatis (ambil jika sudah ada, buat jika belum, tidak pernah membuat cart kedua).
 
-### C. Cara Kirim Token (berlaku di semua endpoint bertanda 🔒 di bawah)
+### C. Logout 🔒
+
+- **Method:** `POST`
+- **Endpoint:** `/auth/logout/`
+- **Respons Sukses (200 OK):**
+
+```json
+{
+  "code": 200,
+  "status": "success",
+  "message": "Logout berhasil"
+}
+```
+
+**Response Header (contoh):**
+
+```
+Set-Cookie: access_token=; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Path=/
+```
+
+> Logout menghapus cookie `access_token` di browser. Karena tidak ada refresh token dan JWT bersifat stateless, token lama secara teknis masih valid sampai expired, tetapi browser tidak lagi mengirimnya.
+
+### D. Cara Kirim Token (berlaku di semua endpoint bertanda 🔒 di bawah)
 
 Karena pakai httpOnly cookie, browser otomatis mengirim cookie ini di setiap request ke domain yang sama, sehingga **tidak perlu** header `Authorization` manual dari frontend.
 
 > TODO: pastikan request dari frontend (fetch/axios) menyertakan `credentials: 'include'` supaya cookie ikut terkirim, terutama karena Next.js dan Django kemungkinan beda port saat development.
 
-### D. Perbedaan Akses per Role
+### E. Perbedaan Akses per Role
 
 | Role                | Bisa akses                                                                                                                                                                                         | Batasan / Scope                                                                  |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | guest (belum login) | Lihat daftar produk & pencarian, lihat detail produk & galeri gambar, lihat daftar kategori, registrasi & login                                                                                    | Tidak bisa transaksi atau menyimpan keranjang ke server                          |
 | customer            | Kelola keranjang belanja, checkout, lihat riwayat & detail invoice, batalkan order sendiri (status masih pending), update profil & alamat pribadi                                                  | Hanya bisa akses cart/order miliknya sendiri (`WHERE user_id = current_user.id`) |
 | admin               | CRUD kategori, CRUD produk + varian + galeri foto, update stok, lihat semua order semua customer, ubah status item order, batalkan item order jika stok kosong, kelola role/status user (opsional) | Akses penuh ke back-office, tidak ada batasan user-scope pada transaksi          |
+
+> Tidak semua kemampuan di tabel ini sudah punya endpoint. Yang belum didefinisikan dicatat di bagian 6 (Backlog).
 
 ---
 
@@ -166,7 +193,7 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
       "category_id": 2,
       "name": "Sepatu Lari",
       "description": "Sepatu nyaman untuk lari",
-      "thumbnail_url": "/images/sepatu.jpg",
+      "thumbnail_url": "/images/sepatu-card.jpg",
       "price_from": 350000.0,
       "created_at": "2026-09-27T16:05:13.000000Z",
       "updated_at": "2026-09-27T16:05:13.000000Z"
@@ -175,7 +202,7 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
 }
 ```
 
-> Catatan: `price_from` = harga varian termurah dari produk ini (karena harga sekarang melekat ke varian, bukan produk). `thumbnail_url` diambil dari `product_image` dengan `is_thumbnail = true`.
+> Catatan: `price_from` = harga varian termurah dari produk ini (karena harga melekat ke varian, bukan produk). `thumbnail_url` diambil dari kolom `products.thumbnail_url` (gambar khusus untuk kartu produk, terpisah dari galeri varian).
 
 ### B. Mendapatkan Detail Satu Produk
 
@@ -192,10 +219,6 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
     "name": "Sepatu Lari",
     "category_id": 2,
     "description": "Sepatu lari ringan dan nyaman.",
-    "images": [
-      { "image_url": "/images/sepatu-1.jpg", "is_thumbnail": true },
-      { "image_url": "/images/sepatu-2.jpg", "is_thumbnail": false }
-    ],
     "variants": [
       {
         "id": 1,
@@ -205,6 +228,10 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
         "attributes": [
           { "name": "Ukuran", "value": "42" },
           { "name": "Warna", "value": "Hitam" }
+        ],
+        "images": [
+          { "image_url": "/images/sepatu-42-hitam-1.jpg", "sort_order": 1 },
+          { "image_url": "/images/sepatu-42-hitam-2.jpg", "sort_order": 2 }
         ]
       },
       {
@@ -215,12 +242,44 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
         "attributes": [
           { "name": "Ukuran", "value": "43" },
           { "name": "Warna", "value": "Hitam" }
+        ],
+        "images": [
+          { "image_url": "/images/sepatu-43-hitam-1.jpg", "sort_order": 1 }
         ]
       }
     ]
   }
 }
 ```
+
+> Galeri gambar melekat ke varian. `images` diurutkan berdasarkan `sort_order` naik. Tidak ada flag `is_thumbnail`; gambar untuk kartu produk ada di `thumbnail_url` pada endpoint 2.A.
+
+### C. Mendapatkan Daftar Kategori
+
+- **Method:** `GET`
+- **Endpoint:** `/categories/`
+- **Respons Sukses (200 OK):**
+
+```json
+{
+  "code": 200,
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "name": "Sepatu",
+      "description": "Sepatu olahraga dan casual"
+    },
+    {
+      "id": 2,
+      "name": "Tas",
+      "description": null
+    }
+  ]
+}
+```
+
+> Tidak memerlukan autentikasi. `description` bernilai `null` jika kategori tidak punya deskripsi.
 
 ---
 
@@ -249,7 +308,7 @@ Endpoint ini butuh sesi login aktif (cookie JWT).
           { "name": "Ukuran", "value": "42" },
           { "name": "Warna", "value": "Hitam" }
         ],
-        "thumbnail_url": "/images/sepatu-1.jpg",
+        "thumbnail_url": "/images/sepatu-42-hitam-1.jpg",
         "qty": 2,
         "price": 350000.0,
         "subtotal": 700000.0
@@ -259,6 +318,8 @@ Endpoint ini butuh sesi login aktif (cookie JWT).
   }
 }
 ```
+
+> Catatan: `thumbnail_url` item cart diambil dari gambar pertama varian tersebut (urut `sort_order` terkecil). Jika varian belum punya gambar, nilainya `null`.
 
 ### B. Menambah Barang ke Keranjang
 
@@ -344,6 +405,14 @@ Endpoint ini butuh sesi login aktif (cookie JWT).
 3. Selain itu, order mengikuti tahap paling awal dari item yang tersisa (urutan: `pending` → `processing` → `shipped` → `delivered`).
 
 Contoh: item 1 `shipped` dan item 2 `pending` menghasilkan order `pending`.
+
+**Aturan `total_amount`:**
+
+`total_amount` dihitung ulang otomatis oleh backend setiap status item berubah, bersamaan dengan `orders.status` dan dalam transaksi database yang sama.
+
+1. `total_amount` = jumlah `subtotal` dari item yang tidak `cancelled`.
+2. Jika semua item `cancelled`, `total_amount` menjadi `0`.
+3. `qty` dan `price_per_unit` di tiap item tidak berubah (snapshot tetap utuh).
 
 **Aturan perpindahan status item:**
 
@@ -484,7 +553,7 @@ Contoh: item 1 `shipped` dan item 2 `pending` menghasilkan order `pending`.
 ```
 
 > Hanya bisa dilakukan jika `status` order masih `pending`. Selain itu, response `400 ORDER_CANNOT_BE_CANCELLED`.
-> Saat order dibatalkan, semua item menjadi `cancelled` dan stok varian dikembalikan sesuai `qty` tiap item.
+> Saat order dibatalkan, semua item menjadi `cancelled`, stok varian dikembalikan sesuai `qty` tiap item, dan `total_amount` order menjadi `0`.
 > Customer hanya bisa membatalkan seluruh order. Pembatalan sebagian item dilakukan oleh admin (lihat 5.C).
 
 ---
@@ -532,7 +601,7 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
     "id": 1,
     "invoice": "INV-001",
     "customer_name": "ariefirman",
-    "no_hp": "08549684649",
+    "phone_number": "08549684649",
     "status": "pending",
     "shipping_address": "Jl Sukamaju 10, Kota Bandung, Jawa Barat, Indonesia",
     "total_amount": 700000.0,
@@ -557,7 +626,7 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 }
 ```
 
-> Struktur sama dengan 4.C, ditambah `customer_name` dan `no_hp`. Tidak ada batasan kepemilikan order. `id` item di sini dipakai untuk endpoint 5.C.
+> Struktur sama dengan 4.C, ditambah `customer_name` dan `phone_number`. Tidak ada batasan kepemilikan order. `id` item di sini dipakai untuk endpoint 5.C.
 
 ### C. Update Status Item Order
 
@@ -582,7 +651,7 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 ```
 
 > Nilai `status` yang valid dan aturan perpindahannya mengikuti bagian 4. Perubahan yang melanggar aturan ditolak dengan `400 INVALID_STATUS_TRANSITION`.
-> Setelah status item berubah, `orders.status` dihitung ulang otomatis oleh backend (admin tidak mengubahnya manual).
+> Setelah status item berubah, `orders.status` dan `orders.total_amount` dihitung ulang otomatis oleh backend (admin tidak mengubahnya manual).
 > Jika status diubah ke `cancelled`, stok varian dikembalikan sesuai `qty` item tersebut saja, bukan seluruh order.
 
 ### D. Update Data Produk & Varian
@@ -596,6 +665,7 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
   "name": "Sepatu Lari",
   "category_id": 2,
   "description": "Sepatu lari ringan dan nyaman.",
+  "thumbnail_url": "/images/sepatu-card.jpg",
   "variants": [{ "id": 1, "price": 360000.0, "qty": 45 }]
 }
 ```
@@ -610,22 +680,24 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 }
 ```
 
-> Admin boleh mengubah `name`, `category_id`, `description` di level produk, serta `price`, `qty`, dan `sku` di level varian.
+> Admin boleh mengubah `name`, `category_id`, `description`, dan `thumbnail_url` (gambar kartu di daftar produk) di level produk, serta `price`, `qty`, dan `sku` di level varian.
 > Karena `sku` bersifat unik, mengganti ke SKU yang sudah dipakai varian lain ditolak dengan `400 VALIDATION_ERROR`.
 > Perubahan harga atau SKU tidak memengaruhi order lama, karena order menyimpan snapshot.
 
 ### E. Kelola Galeri Gambar Produk
 
+Galeri gambar melekat ke **varian**, bukan ke produk.
+
 **Tambah gambar**
 
 - **Method:** `POST`
-- **Endpoint:** `/admin/products/{id}/images/`
+- **Endpoint:** `/admin/products/{id}/variants/{variant_id}/images/`
 - **Body Request:**
 
 ```json
 {
-  "image_url": "/images/sepatu-3.jpg",
-  "is_thumbnail": false
+  "image_url": "/images/sepatu-42-hitam-3.jpg",
+  "sort_order": 3
 }
 ```
 
@@ -642,7 +714,7 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 **Hapus gambar**
 
 - **Method:** `DELETE`
-- **Endpoint:** `/admin/products/{id}/images/{image_id}/`
+- **Endpoint:** `/admin/products/{id}/variants/{variant_id}/images/{image_id}/`
 - **Respons Sukses (200 OK):**
 
 ```json
@@ -653,4 +725,17 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 }
 ```
 
-> Satu produk hanya boleh punya satu gambar dengan `is_thumbnail = true`. Validasinya dilakukan di level aplikasi (Django).
+> Jika `variant_id` bukan milik produk `{id}`, respons `404 PRODUCT_VARIANT_NOT_FOUND`. Jika `image_id` bukan milik varian tersebut, respons `404 IMAGE_NOT_FOUND`.
+> `sort_order` bersifat opsional (default `0`).
+
+---
+
+## 6. Backlog (belum didefinisikan)
+
+Kemampuan yang disebut di tabel role (bagian 1.E) tetapi belum punya endpoint di kontrak ini. Tambahkan ke kontrak sebelum dikerjakan di backend.
+
+- Admin: CRUD kategori (buat, ubah, hapus).
+- Admin: buat dan hapus produk, buat dan hapus varian (saat ini baru ada ubah produk dan varian lewat 5.D).
+- Guest: pencarian produk (parameter query di `GET /products/`).
+- Customer: update profil dan alamat pribadi.
+- Keputusan soft delete vs hard delete untuk produk, varian, dan kategori (ditunda sampai fitur hapus dikerjakan).

@@ -1,0 +1,128 @@
+  // Use DBML to define your database structure
+  // Docs: https://dbml.dbdiagram.io/docs
+
+  Table users {
+    id integer [primary key]
+    role_id integer [not null]
+    username varchar 
+    email varchar [not null, unique]
+    password varchar [not null]
+    phone_number varchar
+    created_at timestamp
+    updated_at timestamp
+    deleted_at timestamp
+  }
+
+  Table roles {
+    id integer [primary key]
+    name varchar [not null, unique]
+    created_at timestamp
+    updated_at timestamp
+    deleted_at timestamp
+  }
+
+  Table categories {
+    id integer [primary key]
+    name varchar [not null, unique]
+    description text
+    created_at timestamp
+    updated_at timestamp  
+    deleted_at timestamp
+  }
+
+  Table products {
+    id integer [primary key]
+    category_id integer [not null]
+    thumbnail_url varchar
+    name varchar [not null]
+    description text
+    created_at timestamp
+    updated_at timestamp
+    deleted_at timestamp
+  }
+
+  Table products_variants {
+    id integer [primary key]
+    product_id integer [not null]
+    sku varchar [not null, unique]
+    price decimal(15,2) [not null]
+    qty integer [not null]
+    created_at timestamp
+    updated_at timestamp
+    deleted_at timestamp
+  }
+
+  Table products_attributes {
+    id integer [primary key]
+    product_variant_id integer [not null]
+    attributes_name varchar [not null, note: "e.g. 'color', 'size'" ]  
+    attributes_value varchar [not null, note: "e.g. 'Black', 'L'" ]  
+    indexes {
+      (product_variant_id, attributes_name) [unique]
+    }
+  }
+
+  Table orders {
+    id integer [primary key]
+    user_id integer [not null]
+    invoice varchar [not null, unique]
+    status varchar [not null, default: 'pending', note: "values: 'pending','processing','shipped','delivered','cancelled'"]
+    total_amount decimal(15,2) [not null]
+    shipping_address text [not null]
+    created_at timestamp
+    updated_at timestamp
+  }
+
+  Table order_details {
+    id integer [primary key]
+    order_id integer [not null]
+    product_variant_id integer [not null]
+    product_name varchar [not null]
+    sku varchar [not null]
+    variant_attributes jsonb [not null]
+    qty integer [not null]
+    price_per_unit decimal(15,2) [not null]
+    status varchar [not null, default: 'pending', note: "values: 'pending','processing','shipped','delivered','cancelled'"]
+    created_at timestamp
+    updated_at timestamp
+  }
+
+  Table cart {
+    id integer [primary key]
+    user_id integer [not null, unique]
+  }
+
+  Table cart_items {
+    id integer [primary key]
+    cart_id integer [not null]
+    product_variant_id integer [not null]
+    qty integer [not null]
+    indexes {
+      (cart_id, product_variant_id) [unique]
+    } 
+  }
+
+  Table product_image {
+    id integer [primary key]
+    product_variant_id integer [not null]
+    image_url varchar [not null]
+    sort_order integer [default: 0]
+    created_at timestamp
+  } 
+
+  // Relationships
+
+  // One-to-one
+  Ref user_cart: users.id - cart.user_id [delete: cascade]
+
+  // Many-to-one
+  Ref user_roles: users.role_id > roles.id [delete: restrict]
+  Ref product_category: products.category_id > categories.id [delete: restrict]
+  Ref product_variants: products_variants.product_id > products.id [delete: cascade]
+  Ref product_attributes: products_attributes.product_variant_id > products_variants.id [delete: cascade]
+  Ref product_image: product_image.product_variant_id > products_variants.id [delete: cascade]
+  Ref cart_items_cart: cart_items.cart_id > cart.id [delete: cascade]  
+  Ref product_cart: cart_items.product_variant_id > products_variants.id [delete: cascade]
+  Ref order_user: orders.user_id > users.id [delete: restrict] 
+  Ref order_details_order: order_details.order_id > orders.id [delete: cascade] 
+  Ref product_order_details: order_details.product_variant_id > products_variants.id [delete: restrict]
