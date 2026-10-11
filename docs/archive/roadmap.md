@@ -1,4 +1,6 @@
-# 🗺️ Roadmap Project MWA Store (3-Layer Architecture)
+<!--  perlu di upda
+
+# 🗺️ Roadmap Project MWA Store (3-Layer Architecture) -->
 
 Panduan urutan kerja dari awal sampai akhir. Task yang terlewat boleh ditambahkan sendiri di fase yang paling sesuai. Dokumen ini kerangka, bukan daftar final yang kaku.
 
@@ -15,7 +17,7 @@ Panduan urutan kerja dari awal sampai akhir. Task yang terlewat boleh ditambahka
 **Sudah selesai**
 
 - [x] API contract disinkronkan dengan ERD varian produk (`product_variant_id`)
-- [x] Response Register tanpa password, `no_hp` sebagai string
+- [x] Response Register tanpa password, `phone_number` sebagai string
 - [x] Keputusan auth: JWT di httpOnly cookie, 7 hari, tanpa refresh token
 - [x] Daftar status: `pending`, `processing`, `shipped`, `delivered`, `cancelled`
 - [x] Keputusan status per item (Level 2), `orders.status` dihitung otomatis
@@ -146,7 +148,7 @@ Panduan urutan kerja dari awal sampai akhir. Task yang terlewat boleh ditambahka
 **Hari 13**
 
 - [ ] Endpoint admin: list semua order
-- [ ] Endpoint admin: detail order (dengan `customer_name`, `no_hp`)
+- [ ] Endpoint admin: detail order (dengan `customer_name`, `phone_number`)
 - [ ] Endpoint update status item order
 
 **Hari 14**
