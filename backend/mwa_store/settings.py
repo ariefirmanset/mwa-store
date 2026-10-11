@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.roles',
     'apps.core',
     'apps.categories',
+    'apps.products',
 ]
 
 MIDDLEWARE = [
