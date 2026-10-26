@@ -1,30 +1,45 @@
 html[dir="rtl"] .page-wrapper {
-    margin-right: calc(240px + 80px);
+    margin-right: 260px;
     margin-left: 0;
 }
 
 html[dir="rtl"] .menu-sidebar {
     left: unset;
-    right: 80px;
+    right: 0px;
+}
+html[dir="rtl"] .brand-logo img {
+    transform: scaleX(-1);
 }
 
-html[dir="rtl"][data-sidebar-type="mini-sidebar"] .page-wrapper {
-    margin-left: unset;
-    margin-right: 80px;
-}
 
 html[dir="rtl"][data-layout='horizontal'] .page-wrapper {
     margin-right: 0 !important
 }
 
+html[dir="rtl"][data-sidebar-type="mini-sidebar"] .brand-logo {
+    overflow: hidden;
+    margin-left: -10px !important;
+    margin-right: 5px !important;
+}
+
+html[dir="rtl"][data-sidebar-type="mini-sidebar"] .page-wrapper {
+    margin-left: unset !important;
+    margin-right: 80px !important;
+}
+
 @media (max-width: 1199px) {
-    html[dir="rtl"][data-sidebar-type="mini-sidebar"] .menu-sidebar {
+    html[dir="rtl"] [data-sidebar-type="mini-sidebar"] .menu-sidebar {
         left: unset;
-        right: -240px
+        right: -260px
     }
 
     html[dir="rtl"] .page-wrapper {
         margin-right: 0 !important;
+    }
+
+    html[dir="rtl"][data-sidebar-type="mini-sidebar"] .page-wrapper {
+        margin-left: unset !important;
+        margin-right: 0px !important;
     }
 }
 
@@ -32,6 +47,9 @@ html[dir="rtl"] select:not([size]) {
     padding-left: 35px;
 }
 
+html[dir=rtl][data-sidebar-type=full-sidebar] .page-wrapper-sub {
+    margin-left: 15px;
+}
 
 html[dir="rtl"] .megamenu {
     transform: translate(-95%, 40px) !important;
@@ -49,21 +67,6 @@ html[dir="rtl"] table tr th,
 html[dir="rtl"] table tr td {
     text-align: right;
 }
-
-html[dir="rtl"] .minisidebar-icon {
-    left: unset;
-}
-
-html[dir="rtl"][data-sidebar-type="full-sidebar"] .page-wrapper-sub {
-    margin-left: 15px;
-}
-
-html[dir="rtl"][data-sidebar-type="mini-sidebar"] .page-wrapper-sub {
-    margin-right: 15px;
-
-}
-
-
 
 html[dir="rtl"] .marquee1-group {
     animation: marquee-rtl 45s linear infinite;

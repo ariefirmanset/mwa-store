@@ -3,7 +3,7 @@ import { Badge, Dropdown } from "flowbite-react";
 import * as profileData from "./Data";
 import SimpleBar from "simplebar-react";
 import { Link } from "react-router";
-import profileImg from "/src/assets/images/profile/user-1.jpg"
+import user from "/src/assets/images/profile/user-1.jpg"
 const Profile = () => {
   return (
     <div className="relative ">
@@ -15,7 +15,7 @@ const Profile = () => {
           <div className="flex items-center gap-1">
             <span className="h-10 w-10 hover:text-primary rounded-full flex justify-center items-center cursor-pointer group-hover/menu:bg-lightprimary group-hover/menu:text-primary">
               <img
-                src={profileImg}
+                src={user}
                 alt="logo"
                 height="35"
                 width="35"
@@ -33,7 +33,7 @@ const Profile = () => {
         <div className="px-6">
           <div className="flex items-center gap-6 pb-5 border-b dark:border-darkborder mt-5 mb-3">
             <img
-              src={profileImg}
+              src={user}
               alt="logo"
               height="56"
               width="56"

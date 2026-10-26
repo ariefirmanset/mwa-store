@@ -1,7 +1,6 @@
-
-import  { createContext, useState, ReactNode, useEffect } from 'react';
-import config from './config'
-import React from "react";
+import { createContext, useState, ReactNode, useEffect } from 'react';
+import config from './config';
+import React from 'react';
 
 // Define the shape of the context state
 interface CustomizerContextState {
@@ -23,7 +22,6 @@ interface CustomizerContextState {
   setIsBorderRadius: (radius: number) => void;
   isCollapse: string;
   setIsCollapse: (collapse: string) => void;
-
 }
 
 // Create the context with an initial value
@@ -45,17 +43,16 @@ export const CustomizerContextProvider: React.FC<CustomizerContextProps> = ({ ch
   const [isBorderRadius, setIsBorderRadius] = useState<number>(config.isBorderRadius);
   const [isCollapse, setIsCollapse] = useState<string>(config.isCollapse);
   const [isLanguage, setIsLanguage] = useState<string>(config.isLanguage);
-
+  const [isMobileSidebar, setIsMobileSidebar] = useState<boolean>(false);
 
   // Set attributes immediately
   useEffect(() => {
-    document.documentElement.setAttribute("class", activeMode);
-    document.documentElement.setAttribute("dir", activeDir);
+    document.documentElement.setAttribute('class', activeMode);
+    document.documentElement.setAttribute('dir', activeDir);
     document.documentElement.setAttribute('data-color-theme', activeTheme);
-    document.documentElement.setAttribute("data-layout", activeLayout);
-    document.documentElement.setAttribute("data-boxed-layout", isLayout);
-    document.documentElement.setAttribute("data-sidebar-type", isCollapse);
-
+    document.documentElement.setAttribute('data-layout', activeLayout);
+    document.documentElement.setAttribute('data-boxed-layout', isLayout);
+    document.documentElement.setAttribute('data-sidebar-type', isCollapse);
   }, [activeMode, activeDir, activeTheme, activeLayout, isLayout, isCollapse]);
 
   return (
@@ -81,12 +78,11 @@ export const CustomizerContextProvider: React.FC<CustomizerContextProps> = ({ ch
         setIsCollapse,
         isLanguage,
         setIsLanguage,
-
+        isMobileSidebar,
+        setIsMobileSidebar,
       }}
     >
       {children}
     </CustomizerContext.Provider>
   );
 };
-
-

@@ -1,34 +1,35 @@
 
-import { useContext, useEffect } from "react";
+import  { useContext, useEffect } from "react";
 import { useTranslation } from 'react-i18next'
-import { Dropdown } from "flowbite-react";
+import {  Dropdown } from "flowbite-react";
 import { CustomizerContext } from "src/context/CustomizerContext";
-import engFlag from "/src/assets/images/flag/icon-flag-en.svg"
-import cnFlag from "/src/assets/images/flag/icon-flag-cn.svg"
-import frFlag from "/src/assets/images/flag/icon-flag-fr.svg"
-import saFlag from "/src/assets/images/flag/icon-flag-sa.svg"
+
+import en from "/src/assets/images/flag/icon-flag-en.svg";
+import cn from "/src/assets/images/flag/icon-flag-cn.svg";
+import fr from "/src/assets/images/flag/icon-flag-fr.svg";
+import sa from "/src/assets/images/flag/icon-flag-sa.svg";
 
 
 const Languages = [
   {
     flagname: "English (UK)",
-    icon: engFlag,
+    icon: en,
     value: "en",
   },
   {
     flagname: "中国人 (Chinese)",
-    icon: cnFlag,
+    icon: cn,
     value: "ch",
   },
   {
     flagname: "français (French)",
-    icon: frFlag,
+    icon: fr,
     value: "fr",
   },
 
   {
     flagname: "عربي (Arabic)",
-    icon: saFlag,
+    icon: sa,
     value: "ar",
   },
 ];

@@ -19,124 +19,123 @@ export interface MenuItem {
   url?: any;
 }
 
-import { uniqueId } from "lodash";
+import { uniqueId } from 'lodash';
 
 const SidebarContent: MenuItem[] = [
-  
-
   {
-    id: 1,
-    name: "Pages",
-    items: [
+    heading: 'Dashboards',
+    children: [
       {
-        heading: "Pages",
+        name: 'Dashboard1',
+        icon: 'solar:atom-line-duotone',
+        id: uniqueId(),
+        url: '/',
+      },
+      {
+        name: 'Dashboard2',
+        icon: 'solar:chart-line-duotone',
+        id: uniqueId(),
+        url: '/dashboards/dashboard2',
+      },
+      {
+        name: 'Dashboard3',
+        icon: 'solar:screencast-2-line-duotone',
+        id: uniqueId(),
+        url: '/dashboards/dashboard3',
+      },
+      {
+        name: 'Front Pages',
+        id: uniqueId(),
+        icon: 'solar:home-angle-linear',
         children: [
           {
-            name: "Sample Page 1",
-            icon: "solar:home-angle-outline",
+            name: 'Homepage',
             id: uniqueId(),
-            url: "/",
+            url: '/frontend-pages/homepage',
           },
           {
-            name: "Sample Page 2",
-            icon: "solar:settings-minimalistic-line-duotone",
+            name: 'About Us',
             id: uniqueId(),
-            url: "/sample-page",
-          }
-         
+            url: '/frontend-pages/aboutus',
+          },
+          {
+            name: 'Blog',
+            id: uniqueId(),
+            url: '/frontend-pages/blog',
+          },
+          {
+            name: 'Blog Details',
+            id: uniqueId(),
+            url: '/frontend-pages/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow',
+          },
+          {
+            name: 'Contact Us',
+            id: uniqueId(),
+            url: '/frontend-pages/contact',
+          },
+          {
+            name: 'Portfolio',
+            id: uniqueId(),
+            url: '/frontend-pages/portfolio',
+          },
+          {
+            name: 'Pricing',
+            id: uniqueId(),
+            url: '/frontend-pages/pricing',
+          },
         ],
+      },
+      {
+        name: 'Landingpage',
+        icon: 'solar:bill-list-line-duotone',
+        id: uniqueId(),
+        url: '/landingpage',
       },
     ],
   },
   {
-    id: 2,
-    name: "Menu",
-    items: [
+    heading: 'Apps',
+    children: [
       {
-        heading: "Multi level",
-        children: [
-          {
-            name: "Menu Level",
-            icon: "solar:widget-add-line-duotone",
-            id: uniqueId(),
-            children: [
-              {
-                id: uniqueId(),
-                name: "Level 1",
-                url: "",
-              },
-              {
-                id: uniqueId(),
-                name: "Level 1.1",
-                icon: "fad:armrecording",
-                url: "",
-                children: [
-                  {
-                    id: uniqueId(),
-                    name: "Level 2",
-                    url: "",
-                  },
-                  {
-                    id: uniqueId(),
-                    name: "Level 2.1",
-                    icon: "fad:armrecording",
-                    url: "",
-                    children: [
-                      {
-                        id: uniqueId(),
-                        name: "Level 3",
-                        url: "",
-                      },
-                      {
-                        id: uniqueId(),
-                        name: "Level 3.1",
-                        url: "",
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+        id: uniqueId(),
+        name: 'Contacts',
+        icon: 'solar:phone-line-duotone',
+        url: '/apps/contacts',
       },
       {
-        heading: "More Options",
+        name: 'Ecommerce',
+        id: uniqueId(),
+        icon: 'solar:cart-3-line-duotone',
         children: [
           {
             id: uniqueId(),
-            url: "/sample-page",
-            name: "Applications",
-            icon: "solar:check-circle-bold",
-            color: "text-primary",
+            name: 'Shop',
+            url: '/apps/ecommerce/shop',
           },
           {
             id: uniqueId(),
-            url: "",
-            name: "Form Options",
-            icon: "solar:check-circle-bold",
-            color: "text-secondary",
+            name: 'Details',
+            url: '/apps/ecommerce/detail/3',
           },
           {
             id: uniqueId(),
-            url: "",
-            name: "Table Variations",
-            icon: "solar:check-circle-bold",
-            color: "text-info",
+            name: 'List',
+            url: '/apps/ecommerce/list',
           },
           {
             id: uniqueId(),
-            url: "",
-            name: "Charts Selection",
-            icon: "solar:check-circle-bold",
-            color: "text-warning",
+            name: 'Checkout',
+            url: '/apps/ecommerce/checkout',
           },
           {
             id: uniqueId(),
-            url: "",
-            name: "Widgets",
-            icon: "solar:check-circle-bold",
-            color: "text-success",
+            name: 'Add Product',
+            url: '/apps/ecommerce/addproduct',
+          },
+          {
+            id: uniqueId(),
+            name: 'Edit Product',
+            url: '/apps/ecommerce/editproduct',
           },
         ],
       },

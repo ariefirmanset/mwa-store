@@ -1,6 +1,5 @@
-
-import  { createContext, useState, ReactNode, } from 'react';
-import React from "react";
+import { createContext, useState, ReactNode } from 'react';
+import React from 'react';
 
 // Define the shape of the context state
 interface DashboardContextState {
@@ -28,12 +27,10 @@ export const DashboardContextProvider: React.FC<DashboardContextProps> = ({ chil
         isSidebarOpen,
         setIsSidebarOpen,
         isMobileSidebarOpen,
-        setIsMobileSidebarOpen
+        setIsMobileSidebarOpen,
       }}
     >
       {children}
     </DashboardContext.Provider>
   );
 };
-
-

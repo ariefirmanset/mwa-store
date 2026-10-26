@@ -5,6 +5,9 @@
 @import './layouts/horizontal.css';
 @import './layouts/header.css';
 @import './pages/dashboards.css';
+@import './pages/widgets.css';
+@import './pages/landingpage.css';
+@import './pages/frontpages.css';
 @import './pages/auth.css';
 @import './pages/app.css';
 @import './theme/default-colors.css';
@@ -216,25 +219,6 @@
 
   .ui-checkbox {
     @apply h-[18px] w-[18px] border border-border dark:border-darkborder bg-white dark:bg-transparent data-[checked]:bg-primary dark:data-[checked]:bg-primary rounded cursor-pointer focus:ring-0 focus:ring-offset-0 outline-none
-  }
-
-
-
-
-}
-
-
-
-@layer base {
-  :root {
-
-
-
-    --radius: 0.5rem
-
-
-
-
   }
 
 

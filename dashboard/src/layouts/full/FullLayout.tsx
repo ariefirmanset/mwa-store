@@ -1,11 +1,11 @@
 import { FC, useContext } from 'react';
-import { Outlet } from "react-router";
+import { Outlet } from 'react-router';
 import { Customizer } from './shared/customizer/Customizer';
 import { CustomizerContext } from '../../context/CustomizerContext';
 import Sidebar from './vertical/sidebar/Sidebar';
 import Header from './vertical/header/Header';
+import PartialTransitioning from 'src/components/headless-ui/Transition/PartialTransitioning';
 import ScrollToTop from 'src/components/shared/ScrollToTop';
-
 
 
 const FullLayout: FC = () => {
@@ -13,6 +13,7 @@ const FullLayout: FC = () => {
 
   return (
       <>
+      
     <div className="flex w-full min-h-screen dark:bg-darkgray">
       <div className="page-wrapper flex w-full  ">
         {/* Header/sidebar */}
@@ -45,6 +46,7 @@ const FullLayout: FC = () => {
               </ScrollToTop>
             </div>
             <Customizer />
+            <PartialTransitioning/>
           </div>
         </div>
       </div>

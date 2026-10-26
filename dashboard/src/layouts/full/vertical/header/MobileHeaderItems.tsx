@@ -2,13 +2,11 @@
 import { Icon } from "@iconify/react";
 import Notifications from "./Notifications";
 import Profile from "./Profile";
-
+import { Language } from "./Language";
 import { Navbar } from "flowbite-react";
 import AppLinks from "./AppLinks";
-
 import { useContext } from "react";
-import { CustomizerContext } from "../../../../context/CustomizerContext";
-import { Language } from "./Language";
+import { CustomizerContext } from "src/context/CustomizerContext";
 
 const MobileHeaderItems = () => {
   const { activeMode, setActiveMode } = useContext(CustomizerContext);

@@ -1,7 +1,6 @@
 
 import { Icon } from "@iconify/react";
 import { Badge, Button, Dropdown } from "flowbite-react";
-
 import * as Notification from "./Data";
 import SimpleBar from "simplebar-react";
 import { Link } from "react-router";
