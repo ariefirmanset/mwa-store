@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'rest_framework', 
     'apps.accounts',
     'apps.roles',
     'apps.core',
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,3 +145,38 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+CORS_ALLOWED_ORIGINS = [
+    # Next development server
+    "http://localhost:3000",  
+    "http://127.0.0.1:3000",  
+
+    # React development server
+    "http://localhost:5173",  
+    "http://127.0.0.1:5173",  
+]
+
+CORS_ALLOWED_METHODS = [
+    'DELETE',
+    'GET', 
+    'OPTIONS',  # Always required for preflight requests
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# Note: Header names are case-insensitive, but lowercase is conventionally used
+CORS_ALLOWED_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',      # Essential for token-based authentication
+    'content-type',       # Required for JSON requests
+    'origin',            # Standard CORS header
+    'user-agent',        # Standard browser header
+    'x-csrftoken',       # Django CSRF token
+    'x-requested-with',  # Common AJAX header
+    'x-api-key',         # Custom authentication header
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_PREFLIGHT_MAX_AGE = 86400
