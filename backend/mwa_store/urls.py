@@ -1,3 +1,5 @@
+from common.test_views import ErrorTestingView
+
 """
 URL configuration for mwa_store project.
 
@@ -19,4 +21,5 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/test-error/', ErrorTestingView.as_view(), name='test-error')
 ]
