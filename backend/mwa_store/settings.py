@@ -180,3 +180,9 @@ CORS_ALLOWED_HEADERS = [
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_PREFLIGHT_MAX_AGE = 86400
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'common.exception_handler.custom_exception_handler',
+}
+
+DEBUG = os.getenv('DJANGO_DEBUG','True') == True
