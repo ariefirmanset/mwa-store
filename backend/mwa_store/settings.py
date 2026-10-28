@@ -185,4 +185,4 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'common.exception_handler.custom_exception_handler',
 }
 
-DEBUG=True
+DEBUG = os.getenv('DJANGO_DEBUG','True') == True
