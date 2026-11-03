@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-g3bvc9*j3!sp&^*co2oq*dr#4vch)(5-1*$!m0o3&-9ks+j^(h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1','0.0.0.0']
 
 
 # Application definition
@@ -187,6 +187,4 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ]
 }
-
-DEBUG = os.getenv('DJANGO_DEBUG','True') == True
 

@@ -1,91 +1,85 @@
-from rest_framework.views import exception_handler 
+from django.core.exceptions import PermissionDenied as DjangoPermissionDenied
+from django.http import Http404
 from rest_framework import status
 from rest_framework.exceptions import (
-    ValidationError,
+    APIException,
     AuthenticationFailed,
     NotAuthenticated,
-    PermissionDenied,
     NotFound,
+    PermissionDenied,
+    ValidationError,
 )
+from rest_framework.views import exception_handler
+
 from .exceptions import BaseCustomException
 
+AUTH_CODE_MAP = {
+    "no_active_account": ("INVALID_CREDENTIALS", "Email atau password salah"),
+    "authentication_failed": ("INVALID_CREDENTIALS", "Email atau password salah"),
+    "not_authenticated": ("NOT_AUTHENTICATED", "Silakan login terlebih dahulu"),
+    "token_not_valid": ("TOKEN_INVALID", "Token tidak valid / expired"),
+}
 
-def _flatten_error(detail):
-    """Helper untuk mengambil pesan error string pertama secara rekursif."""
-    if isinstance(detail, list) and detail:
-        return _flatten_error(detail[0])
-    if isinstance(detail, dict):
-        return {k: _flatten_error(v) for k, v in detail.items()}
-    return str(detail)
+
+def _flatten_error(error):
+    if isinstance(error, (list, tuple)):
+        messages = [_flatten_error(e) for e in error]
+        return messages[0] if len(messages) == 1 else messages
+    if isinstance(error, dict):
+        return {k: _flatten_error(v) for k, v in error.items()}
+    return str(error)
+
+
+def _error(message, code):
+    return {"status": "error", "message": message, "code": code}
 
 
 def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
-    if response is not None:
-        # 1. Custom Exception Bisnis (Produk, Order, Stok, dll.)
-        if isinstance(exc, BaseCustomException):
-            response.data = {
-                "status": "error",
-                "message": exc.detail,
-                "code": exc.code,
-            }
-            return response
+    if response is None:
+        return None  # biarkan Django yang nangani 500
 
-        # 2. Error Validasi Serializer (HTTP 400)
-        if isinstance(exc, ValidationError):
-            formatted_errors = {}
-            if isinstance(response.data, dict):
-                for field, error_list in response.data.items():
-                    formatted_errors[field] = _flatten_error(error_list)
-            elif isinstance(response.data, list):
-                formatted_errors["detail"] = _flatten_error(response.data[0])
+    # 1. Custom exception bisnis
+    if isinstance(exc, BaseCustomException):
+        response.data = _error(str(exc.detail), exc.code)
+        return response
 
-            response.status_code = status.HTTP_400_BAD_REQUEST
-            response.data = {
-                "status": "error",
-                "message": "Validasi gagal",
-                "code": "VALIDATION_ERROR",
-                "errors": formatted_errors,
-            }
-            return response
+    # 2. Validasi serializer (400)
+    if isinstance(exc, ValidationError):
+        if isinstance(response.data, dict):
+            errors = {f: _flatten_error(e) for f, e in response.data.items()}
+        else:
+            errors = {"detail": _flatten_error(response.data)}
+        response.data = {
+            **_error("Validasi gagal", "VALIDATION_ERROR"),
+            "errors": errors,
+        }
+        return response
 
-        # 3. Auth & Kredensial (HTTP 401)
-        if isinstance(exc, (NotAuthenticated, AuthenticationFailed)):
-            # Cek apakah pemicunya adalah kredensial login yang salah
-            err_code = getattr(exc, "code", None) or getattr(exc, "default_code", None)
-            
-            if err_code == "invalid_credentials" or "password" in str(exc.detail).lower():
-                code = "INVALID_CREDENTIALS"
-                message = "Password salah"
-            else:
-                code = "TOKEN_EXPIRED"
-                message = "Token tidak valid / expired"
+    # 3. Auth (401)
+    if isinstance(exc, (NotAuthenticated, AuthenticationFailed)):
+        err_code = exc.get_codes()
+        if not isinstance(err_code, str):
+            err_code = None
+        code, message = AUTH_CODE_MAP.get(
+            err_code, ("TOKEN_INVALID", "Token tidak valid / expired")
+        )
+        response.data = _error(message, code)
+        return response
 
-            response.status_code = status.HTTP_401_UNAUTHORIZED
-            response.data = {
-                "status": "error",
-                "message": message,
-                "code": code,
-            }
-            return response
+    # 4. Hak akses (403), termasuk PermissionDenied bawaan Django
+    if isinstance(exc, (PermissionDenied, DjangoPermissionDenied)):
+        response.data = _error("User tidak punya akses", "FORBIDDEN")
+        return response
 
-        # 4. Hak Akses (HTTP 403)
-        if isinstance(exc, PermissionDenied):
-            response.data = {
-                "status": "error",
-                "message": "User tidak punya akses",
-                "code": "FORBIDDEN",
-            }
-            return response
+    # 5. 404, termasuk Http404 dari get_object_or_404
+    if isinstance(exc, (NotFound, Http404)):
+        response.data = _error("Data tidak ditemukan", "NOT_FOUND")
+        return response
 
-        # 5. Generic 404 (NotFound bawaan DRF / Http404)
-        if isinstance(exc, NotFound):
-            response.data = {
-                "status": "error",
-                "message": str(exc.detail) if exc.detail else "Data tidak ditemukan",
-                "code": getattr(exc, "default_code", "not_found").upper(),
-            }
-            return response
+    # 6. Fallback generik (MethodNotAllowed, Throttled, ParseError, dll.)
+    if isinstance(exc, APIException):
+        response.data = _error(str(exc.detail), exc.default_code.upper())
 
     return response
