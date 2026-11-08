@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/test-error/', ErrorTestingView.as_view(), name='test-error'),
-    path("api/auth/", include("apps.accounts.urls"))
+    path("admin/", admin.site.urls),
+    path("api/test-error/", ErrorTestingView.as_view(), name="test-error"),
+    path("api/auth/", include("apps.accounts.urls")),
 ]

@@ -1,17 +1,15 @@
-from ..models import User
+from django.contrib.auth import authenticate
 from rest_framework import serializers
+from rest_framework.exceptions import AuthenticationFailed
 
-class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['email', 'password']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
 
-    def post(self, validated_data):
-        user = User.objects.create_user(
-            email=validated_data['email'],
-            password=validated_data['password'],
-        )
-        return user
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        user = authenticate(email=attrs["email"], password=attrs["password"])
+        if user is None:
+            raise AuthenticationFailed("Email atau password salah", "no_active_account")
+        attrs["user"] = user
+        return attrs
