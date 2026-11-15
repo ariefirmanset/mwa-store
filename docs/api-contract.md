@@ -67,9 +67,7 @@ Contoh error validasi (banyak field sekaligus):
 
 ```json
 {
-  "username": "ariefirman",
   "email": "devariefirman@gmail.com",
-  "phone_number": "08549684649",
   "password": "User@123"
 }
 ```
@@ -78,14 +76,12 @@ Contoh error validasi (banyak field sekaligus):
 
 ```json
 {
-  "code": 201,
   "status": "success",
   "message": "User berhasil dibuat",
   "data": {
     "id": 1,
-    "username": "ariefirman",
-    "email": "devariefirman@gmail.com",
-    "phone_number": "08549684649"
+    "username": "ariefirman_cjsvIJDI",
+    "email": "devariefirman@gmail.com"
   }
 }
 ```
@@ -112,7 +108,6 @@ Token JWT dikirim lewat `Set-Cookie` (httpOnly), TIDAK muncul di body response.
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Login berhasil",
   "data": {
@@ -141,7 +136,6 @@ Set-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secu
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Logout berhasil"
 }
@@ -185,7 +179,6 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": [
     {
@@ -212,7 +205,6 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": {
     "id": 1,
@@ -262,7 +254,6 @@ Endpoint ini digunakan oleh Next.js untuk menampilkan daftar produk. Tidak memer
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": [
     {
@@ -295,7 +286,6 @@ Endpoint ini butuh sesi login aktif (cookie JWT).
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": {
     "cart_id": 15,
@@ -338,7 +328,6 @@ Endpoint ini butuh sesi login aktif (cookie JWT).
 
 ```json
 {
-  "code": 201,
   "status": "success",
   "message": "Barang berhasil ditambahkan ke keranjang"
 }
@@ -362,7 +351,6 @@ Endpoint ini butuh sesi login aktif (cookie JWT).
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Jumlah barang berhasil diperbarui"
 }
@@ -376,7 +364,6 @@ Endpoint ini butuh sesi login aktif (cookie JWT).
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Barang berhasil dihapus dari keranjang"
 }
@@ -438,7 +425,6 @@ Contoh: item 1 `shipped` dan item 2 `pending` menghasilkan order `pending`.
 
 ```json
 {
-  "code": 201,
   "status": "success",
   "data": {
     "id": 1,
@@ -483,7 +469,6 @@ Contoh: item 1 `shipped` dan item 2 `pending` menghasilkan order `pending`.
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": [
     {
@@ -507,7 +492,6 @@ Contoh: item 1 `shipped` dan item 2 `pending` menghasilkan order `pending`.
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": {
     "id": 1,
@@ -546,7 +530,6 @@ Contoh: item 1 `shipped` dan item 2 `pending` menghasilkan order `pending`.
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Order berhasil dibatalkan"
 }
@@ -570,7 +553,6 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": [
     {
@@ -595,7 +577,6 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "data": {
     "id": 1,
@@ -644,7 +625,6 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Status item order berhasil diperbarui"
 }
@@ -674,7 +654,6 @@ Mengacu ke diagram arsitektur: step 5-6 (Cek Order Masuk) dan step 7-8 (Update S
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Produk berhasil diperbarui"
 }
@@ -705,7 +684,6 @@ Galeri gambar melekat ke **varian**, bukan ke produk.
 
 ```json
 {
-  "code": 201,
   "status": "success",
   "message": "Gambar berhasil ditambahkan"
 }
@@ -719,7 +697,6 @@ Galeri gambar melekat ke **varian**, bukan ke produk.
 
 ```json
 {
-  "code": 200,
   "status": "success",
   "message": "Gambar berhasil dihapus"
 }
