@@ -2,7 +2,10 @@ from ..serializers.login import LoginSerializer
 from ..serializers.register import CreateUserSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 
 
 # Create your views here.
@@ -46,3 +49,32 @@ class LoginView(generics.GenericAPIView):
             },
         }
         return Response(response_data, status=status.HTTP_200_OK)
+
+
+class LogoutView(APIView):
+    """
+    Calls Django logout method and delete the Token object
+    assigned to the current User object.
+
+    Accepts/Returns nothing.
+    """
+
+    # permission_classes = (AllowAny,)
+    permission_classes = [IsAuthenticated]
+
+
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.data.get("refresh_token")
+        if not refresh_token:
+            return Response(
+                {"status": "error", "message": "refresh token wajib diisi"}, status=400
+            )
+
+        try:
+            RefreshToken(refresh_token).blacklist()
+        except TokenError:
+            return Response(
+                {"status": "error", "message": "Token tidak valid atau sudah expired"},
+                status=400,
+            )
+        return Response({"status": "success", "message": "Logout Berhasil"})
