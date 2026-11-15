@@ -1,0 +1,50 @@
+services:
+  # 1. Database (PostgreSQL)
+  db:
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mwa_store   
+      POSTGRES_USER: postgres     # Biasanya 'postgres' jika tidak diganti
+      POSTGRES_PASSWORD: postgres  # Password database lama Anda
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  # 2. Layer Backend (Django - Python)
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/apps    # Menghubungkan folder lokal ke folder /apps di container
+    working_dir: /apps            # Docker otomatis melakukan 'cd' ke folder /apps
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db                       # Pastikan database nyala duluan sebelum backend
+
+  # 3. Layer Dashboard (React JS - Node.js)
+  dashboard:
+    image: node:26-alpine
+    ports:
+      - "3001:3000"              # Buka di browser: localhost:3001 (Port 3000 di dalam container)
+    volumes:
+      - ./dashboard:/app
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0 --port 3000      # Sesuaikan dengan perintah jalan React Anda (bisa juga 'npm run dev')
+
+  # 4. Layer Web Utama (Next JS - Node.js)
+  web:
+    image: node:26-alpine
+    ports:
+      - "3000:3000"              # Buka di browser: localhost:3000
+    volumes:
+      - ./web:/app
+    working_dir: /app
+    command: npm run dev         # Perintah standar menjalankan Next.js
+
+
+# Mendaftarkan kulkas penyimpan data PostgreSQL
+volumes:
+  postgres_data:
