@@ -2,7 +2,7 @@ from ..serializers.login import LoginSerializer
 from ..serializers.register import CreateUserSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
@@ -42,8 +42,8 @@ class LoginView(generics.GenericAPIView):
             "status": "success",
             "message": "Login Berhasil",
             "data": {
-                "access_token": str(access),
-                "refresh_token": str(refresh),
+                "access": str(access),
+                "refresh": str(refresh),
                 "token_type": "Bearer",
                 "expires_in": int(access.lifetime.total_seconds()),
             },
@@ -59,22 +59,20 @@ class LogoutView(APIView):
     Accepts/Returns nothing.
     """
 
-    # permission_classes = (AllowAny,)
-    permission_classes = [IsAuthenticated]
+    permission_classes = (AllowAny,)
+    authentication_classes = []
 
 
     def post(self, request, *args, **kwargs):
-        refresh_token = request.data.get("refresh_token")
-        if not refresh_token:
+        refresh = request.data.get("refresh")
+        if not refresh:
             return Response(
                 {"status": "error", "message": "refresh token wajib diisi"}, status=400
             )
 
         try:
-            RefreshToken(refresh_token).blacklist()
+            RefreshToken(refresh).blacklist()   
         except TokenError:
-            return Response(
-                {"status": "error", "message": "Token tidak valid atau sudah expired"},
-                status=400,
-            )
+            pass  # Token sudah di blacklist atau tidak valid, tapi kita tetap anggap logout berhasil
         return Response({"status": "success", "message": "Logout Berhasil"})
+
